@@ -97,6 +97,18 @@ priorityClass:
   ## PriorityClass value. The higher the value, the higher the scheduling priority
   value: 5
 
+volumes:
+  - name: nfs-mount
+    hostPath:
+      # directory location on host
+      path: /mnt/volumes/
+      type: DirectoryOrCreate
+
+volumeMounts:
+  - mountPath: /mnt/volumes/
+    name: nfs-mount
+    mountPropagation: "HostToContainer"
+
 resources: {}
   # limits:
   #  cpu: 100m
