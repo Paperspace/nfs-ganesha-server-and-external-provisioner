@@ -94,13 +94,15 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          volumeMounts:
-            - name: data
-              mountPath: /export
-          {{- with .Values.resources }}
-          resources:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+
+        {{- with .Values.volumeMounts }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+
+        {{- with .Values.resources }}
+        resources:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
@@ -121,11 +123,9 @@ spec:
       priorityClassName: {{ .Values.priorityClass.name | default (include "nfs-provisioner.fullname" .) | quote }}
       {{- end }}
 
-      {{- if not .Values.persistence.enabled }}
-      volumes:
-        - name: data
-          emptyDir: {}
-      {{- end }}
+    {{- with .Values.volumes }}
+    {{- toYaml . | nindent 8 }}
+    {{- end }}
 
   {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
